@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supermarket Queue Simulation | Performance Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-wrapper">
+            <div class="hero-content">
+                <div class="badge">EEX5362 Performance Modelling</div>
+                <h1>Supermarket Checkout Queue</h1>
+                <p class="subtitle">Discrete Event Simulation & Performance Analysis</p>
+                <div class="hero-stats">
+                    <div class="stat-pill">
+                        <i data-lucide="users" class="icon"></i>
+                        <span id="total-customers">500</span> Customers
+                    </div>
+                    <div class="stat-pill">
+                        <i data-lucide="monitor" class="icon"></i>
+                        <span>3</span> Counters
+                    </div>
+                    <div class="stat-pill">
+                        <i data-lucide="zap" class="icon"></i>
+                        <span>FCFS</span> Queue
+                    </div>
+                </div>
+                <a href="#simulation" class="cta-button">Explore Simulation <i data-lucide="arrow-right"
+                        class="icon-sm"></i></a>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card card-1">
+                    <i data-lucide="clock" class="card-icon"></i>
+                    <div class="card-label">Avg Wait Time</div>
+                    <div class="card-value" id="avg-wait">3.76<span class="unit">min</span></div>
+                    <div class="card-bar">
+                        <div class="card-bar-fill" style="width: 40%"></div>
+                    </div>
+                </div>
+                <div class="floating-card card-2">
+                    <i data-lucide="trending-up" class="card-icon"></i>
+                    <div class="card-label">Throughput</div>
+                    <div class="card-value" id="throughput">59.4<span class="unit">/hr</span></div>
+                    <div class="card-bar">
+                        <div class="card-bar-fill success" style="width: 75%"></div>
+                    </div>
+                </div>
+                <div class="floating-card card-3">
+                    <i data-lucide="activity" class="card-icon"></i>
+                    <div class="card-label">Utilization</div>
+                    <div class="card-value" id="utilization">79.1<span class="unit">%</span></div>
+                    <div class="card-bar">
+                        <div class="card-bar-fill warning" style="width: 79%"></div>
+                    </div>
+                </div>
+                <div class="floating-card card-4">
+                    <i data-lucide="users" class="card-icon"></i>
+                    <div class="card-label">Queue Length</div>
+                    <div class="card-value">12<span class="unit">avg</span></div>
+                    <div class="card-bar">
+                        <div class="card-bar-fill" style="width: 55%"></div>
+                    </div>
+                </div>
+                <div class="floating-card card-5">
+                    <i data-lucide="zap" class="card-icon"></i>
+                    <div class="card-label">95th Percentile</div>
+                    <div class="card-value">14.0<span class="unit">min</span></div>
+                    <div class="card-bar">
+                        <div class="card-bar-fill danger" style="width: 85%"></div>
+                    </div>
+                </div>
+                <!-- Animated Background Elements -->
+                <div class="hero-glow glow-1"></div>
+                <div class="hero-glow glow-2"></div>
+                <div class="hero-particles">
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Workflow Section -->
+    <section id="workflow" class="workflow-section">
+        <div class="container">
+            <h2 class="section-title">System Workflow</h2>
+            <p class="section-subtitle">How the simulation processes customers through the queue</p>
+
+            <div class="workflow-container">
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <div class="step-icon"><i data-lucide="log-in" class="icon-lg"></i></div>
+                    <h3>Customer Arrival</h3>
+                    <p>Customers arrive following a <strong>Poisson process</strong> with exponentially distributed
+                        inter-arrival times</p>
+                </div>
+                <div class="workflow-arrow"><i data-lucide="arrow-right" class="icon"></i></div>
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <div class="step-icon"><i data-lucide="list-ordered" class="icon-lg"></i></div>
+                    <h3>Join Queue</h3>
+                    <p>Customers enter a <strong>shared FCFS queue</strong> and wait for the next available counter</p>
+                </div>
+                <div class="workflow-arrow"><i data-lucide="arrow-right" class="icon"></i></div>
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <div class="step-icon"><i data-lucide="shopping-cart" class="icon-lg"></i></div>
+                    <h3>Service</h3>
+                    <p>Customer is served at one of <strong>3 parallel counters</strong> with exponential service times
+                    </p>
+                </div>
+                <div class="workflow-arrow"><i data-lucide="arrow-right" class="icon"></i></div>
+                <div class="workflow-step">
+                    <div class="step-number">4</div>
+                    <div class="step-icon"><i data-lucide="check-circle" class="icon-lg"></i></div>
+                    <h3>Departure</h3>
+                    <p>Customer completes checkout and exits the system, metrics are recorded</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simulation Section -->
+    <section id="simulation" class="simulation-section">
+        <div class="container">
+            <h2 class="section-title">Live Simulation</h2>
+            <p class="section-subtitle">Watch customers flow through the checkout system</p>
+
+            <div class="simulation-controls">
+                <button id="btn-start" class="control-btn primary"><i data-lucide="play" class="icon-sm"></i> Start
+                    Simulation</button>
+                <button id="btn-pause" class="control-btn"><i data-lucide="pause" class="icon-sm"></i> Pause</button>
+                <button id="btn-reset" class="control-btn"><i data-lucide="rotate-ccw" class="icon-sm"></i>
+                    Reset</button>
+                <div class="speed-control">
+                    <label>Speed:</label>
+                    <input type="range" id="speed-slider" min="1" max="10" value="5">
+                </div>
+            </div>
+
+            <div class="simulation-canvas">
+                <div class="queue-section">
+                    <h4>Queue</h4>
+                    <div id="queue-display" class="queue-display">
+                        <!-- Customers will appear here -->
+                    </div>
+                    <div class="queue-length">Length: <span id="queue-length">0</span></div>
+                </div>
+                <div class="counters-section">
+                    <div class="counter" id="counter-1">
+                        <div class="counter-header">Counter 1</div>
+                        <div class="counter-status idle">Idle</div>
+                        <div class="counter-customer"></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="counter" id="counter-2">
+                        <div class="counter-header">Counter 2</div>
+                        <div class="counter-status idle">Idle</div>
+                        <div class="counter-customer"></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="counter" id="counter-3">
+                        <div class="counter-header">Counter 3</div>
+                        <div class="counter-status idle">Idle</div>
+                        <div class="counter-customer"></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="exit-section">
+                    <h4>Completed</h4>
+                    <div id="completed-count" class="completed-count">0</div>
+                </div>
+            </div>
+
+            <div class="live-metrics">
+                <div class="live-metric">
+                    <span class="metric-label">Simulated Time</span>
+                    <span class="metric-value" id="sim-time">0.00 min</span>
+                </div>
+                <div class="live-metric">
+                    <span class="metric-label">Customers Arrived</span>
+                    <span class="metric-value" id="arrived-count">0</span>
+                </div>
+                <div class="live-metric">
+                    <span class="metric-label">Avg Wait (Live)</span>
+                    <span class="metric-value" id="live-avg-wait">0.00 min</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Dashboard -->
+    <section id="metrics" class="metrics-section">
+        <div class="container">
+            <h2 class="section-title">Performance Metrics</h2>
+            <p class="section-subtitle">Key performance indicators from the simulation</p>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon"><i data-lucide="clock" class="icon-xl"></i></div>
+                    <div class="metric-info">
+                        <span class="metric-title">Average Waiting Time</span>
+                        <span class="metric-big-value">3.76 min</span>
+                        <span class="metric-description">Mean time customers spend in queue before service</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i data-lucide="trending-up" class="icon-xl"></i></div>
+                    <div class="metric-info">
+                        <span class="metric-title">Throughput</span>
+                        <span class="metric-big-value">59.42 /hr</span>
+                        <span class="metric-description">Customers successfully served per hour</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i data-lucide="alert-triangle" class="icon-xl"></i></div>
+                    <div class="metric-info">
+                        <span class="metric-title">95th Percentile Wait</span>
+                        <span class="metric-big-value">14.00 min</span>
+                        <span class="metric-description">95% of customers wait less than this</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i data-lucide="refresh-cw" class="icon-xl"></i></div>
+                    <div class="metric-info">
+                        <span class="metric-title">System Utilization</span>
+                        <span class="metric-big-value">79.1%</span>
+                        <span class="metric-description">Average server busy time percentage</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="subsection-title">Counter Performance</h3>
+            <div class="counter-metrics">
+                <div class="counter-bar">
+                    <div class="counter-label">Counter 1</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 77.29%"></div>
+                    </div>
+                    <div class="counter-percent">77.29%</div>
+                </div>
+                <div class="counter-bar">
+                    <div class="counter-label">Counter 2</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 78.98%"></div>
+                    </div>
+                    <div class="counter-percent">78.98%</div>
+                </div>
+                <div class="counter-bar">
+                    <div class="counter-label">Counter 3</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 80.93%"></div>
+                    </div>
+                    <div class="counter-percent">80.93%</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visualizations Gallery -->
+    <section id="visualizations" class="viz-section">
+        <div class="container">
+            <h2 class="section-title">Visual Analytics</h2>
+            <p class="section-subtitle">Charts generated from simulation data</p>
+
+            <div class="viz-tabs">
+                <button class="viz-tab active" data-tab="waiting">Wait Times</button>
+                <button class="viz-tab" data-tab="utilization">Utilization</button>
+                <button class="viz-tab" data-tab="throughput">Throughput</button>
+                <button class="viz-tab" data-tab="queue">Queue Length</button>
+                <button class="viz-tab" data-tab="gantt">Gantt Chart</button>
+                <button class="viz-tab" data-tab="service">Service Times</button>
+            </div>
+
+            <div class="viz-content">
+                <div class="viz-panel active" id="panel-waiting">
+                    <img src="outputs/waiting_time_dist.png" alt="Waiting Time Distribution">
+                    <div class="viz-description">
+                        <h4>Waiting Time Distribution</h4>
+                        <p>Shows the distribution of customer waiting times with mean and 95th percentile markers. The
+                            exponential shape is typical for M/M/c queues.</p>
+                    </div>
+                </div>
+                <div class="viz-panel" id="panel-utilization">
+                    <img src="outputs/counter_utilization.png" alt="Counter Utilization">
+                    <div class="viz-description">
+                        <h4>Counter Utilization</h4>
+                        <p>Displays the percentage of time each counter was busy. Values near 80% indicate healthy
+                            workload; above 85% signals potential bottlenecks.</p>
+                    </div>
+                </div>
+                <div class="viz-panel" id="panel-throughput">
+                    <img src="outputs/throughput_over_time.png" alt="Throughput Over Time">
+                    <div class="viz-description">
+                        <h4>Throughput Over Time</h4>
+                        <p>Tracks the number of customers served per hour throughout the simulation period.</p>
+                    </div>
+                </div>
+                <div class="viz-panel" id="panel-queue">
+                    <img src="outputs/queue_length_over_time.png" alt="Queue Length">
+                    <div class="viz-description">
+                        <h4>Queue Length Over Time</h4>
+                        <p>Visualizes how the queue builds up and drains during the simulation. Peak points indicate
+                            congestion periods.</p>
+                    </div>
+                </div>
+                <div class="viz-panel" id="panel-gantt">
+                    <img src="outputs/gantt_chart.png" alt="Gantt Chart">
+                    <div class="viz-description">
+                        <h4>Service Timeline (Gantt Chart)</h4>
+                        <p>Shows exactly when each counter served each customer, revealing the parallel processing
+                            nature of the system.</p>
+                    </div>
+                </div>
+                <div class="viz-panel" id="panel-service">
+                    <img src="outputs/service_time_dist.png" alt="Service Time Distribution">
+                    <div class="viz-description">
+                        <h4>Service Time Distribution</h4>
+                        <p>The distribution of checkout durations follows an exponential pattern, as expected from the
+                            simulation parameters.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- System Description -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title">System Description</h2>
+
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3><i data-lucide="target" class="icon"></i> Objective</h3>
+                    <p>Model and evaluate the performance of a supermarket checkout system to identify bottlenecks and
+                        optimize customer wait times.</p>
+                </div>
+                <div class="about-card">
+                    <h3><i data-lucide="box" class="icon"></i> Model Type</h3>
+                    <p><strong>M/M/3 Queue</strong> - Markovian arrivals, Markovian service, 3 parallel servers with a
+                        shared queue (FCFS discipline).</p>
+                </div>
+                <div class="about-card">
+                    <h3><i data-lucide="settings" class="icon"></i> Parameters</h3>
+                    <ul>
+                        <li>Arrival Rate (λ): 1 customer/min</li>
+                        <li>Service Rate (μ): 0.4 customer/min per server</li>
+                        <li>Traffic Intensity (ρ): 0.83</li>
+                    </ul>
+                </div>
+                <div class="about-card">
+                    <h3><i data-lucide="lightbulb" class="icon"></i> Key Findings</h3>
+                    <ul>
+                        <li>System operates at healthy 79% utilization</li>
+                        <li>Wait times can exceed service times during peaks</li>
+                        <li>Workload is balanced across counters</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p><i data-lucide="shopping-cart" class="icon-sm"></i> Supermarket Checkout Queue Simulation | EEX5362
+                Performance Modelling</p>
+            <p class="footer-tech">Built by Kethusha for OUSL</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>

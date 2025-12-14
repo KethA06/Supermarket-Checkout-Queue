@@ -1,0 +1,28 @@
+
+    ==================================================
+    🛒 SUPERMARKET CHECKOUT SIMULATION REPORT
+    ==================================================
+    
+    📊 OVERALL METRICS
+    ------------------
+    Total Customers Served: 500
+    Total Simulation Time : 504.90 minutes
+    Throughput            : 59.42 customers/hour
+    Average Waiting Time  : 3.76 minutes
+    Average Time in System: 6.16 minutes
+    95th % Waiting Time   : 14.00 minutes
+    
+    🖥️ COUNTER METRICS
+    ------------------
+    Counter 1: 77.29% Utilization | Served 161 customers
+    Counter 2: 78.98% Utilization | Served 174 customers
+    Counter 3: 80.93% Utilization | Served 165 customers
+    
+    Workload Imbalance (StdDev of counts): 6.66
+    
+    🚨 BOTTLENECK ANALYSIS
+    ----------------------
+    System utilization is healthy (79.1%).
+Wait time exceeds service time. Process is bottlenecked by service rate.
+    ==================================================
+    
