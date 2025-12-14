@@ -3,7 +3,7 @@
 ## 📌 Project Overview
 This project simulates a supermarket checkout system to model queue performance. It uses a discrete-event simulation approach (`SimPy`) to model 3 parallel checkout counters served by a single queue (or efficient dispatching). The system generates synthetic data, simulates customer flow, computes performance metrics, and produces visual analytics.
 
-## 📂 Directory Structure
+##  Directory Structure
 ```
 /supermarket-checkout-simulation
 │── main.py              # Entry point to run the full system
